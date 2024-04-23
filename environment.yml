@@ -1,0 +1,32 @@
+name: kansas-city
+channels:
+    - conda-forge
+dependencies:
+    # Requirements for core model functionality
+    - python==3.10.13
+    - pip
+    - ipython
+    - matplotlib
+    - pandas
+    - geopandas
+    - numpy
+    - scipy
+    - ipykernel
+    - jupyterlab
+    - seaborn
+    - pypsa
+    - plotly
+    - pyarrow
+    - iprogress
+    - pyogrio
+    - fiona
+    - momepy
+    - pysal
+    - spyder-kernels=2.5
+    - pip:
+      - gridstatus
+      - python-dotenv
+      - highspy
+      - nrelpy
+      - us
+      - census
