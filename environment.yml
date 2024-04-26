@@ -22,6 +22,7 @@ dependencies:
     - fiona
     - momepy
     - pysal
+    - unyt
     - spyder-kernels=2.5
     - pip:
       - gridstatus
