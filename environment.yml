@@ -1,6 +1,7 @@
 name: kansas-city
 channels:
     - conda-forge
+    - bioconda
 dependencies:
     # Requirements for core model functionality
     - python==3.10.13
@@ -12,6 +13,7 @@ dependencies:
     - numpy
     - scipy
     - ipykernel
+    - jupyter
     - jupyterlab
     - seaborn
     - pypsa
@@ -22,12 +24,27 @@ dependencies:
     - fiona
     - momepy
     - pysal
-    - unyt
+    - osmnx
     - spyder-kernels=2.5
+    - unyt
+    - cartopy
+    - descartes
+    - lxml
+    - snakemake
+    - pycountry
+    - yaml
+    - geopy
+    - tqdm
+    - graphviz
+    - networkx
+    - pytz
+    - camelot-py
     - pip:
-      - gridstatus
+      - git+https://github.com/kmax12/gridstatus.git
       - python-dotenv
       - highspy
       - nrelpy
       - us
       - census
+      - streamlit
+      - vresutils
