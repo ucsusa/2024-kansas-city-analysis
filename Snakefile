@@ -5,6 +5,10 @@ env_file = Path("./.env").resolve()
 from dotenv import load_dotenv
 load_dotenv(str(env_file))
 
+rule targets:
+    input: 
+        sfa = "data/timeseries/single-family_attached_load.csv",
+        res_structures = "data/residential_buildings.csv"
 
 rule retrieve_spatial_lut:
     output: 
@@ -38,3 +42,9 @@ rule retrieve_res_load:
         sfa = "data/timeseries/single-family_attached_load.csv"
     script: "scripts/retrieve_res_load.py"
     
+rule build_dag:
+    input: "Snakefile"
+    output:
+        "dag.png"
+    shell:
+        "snakemake --dag | dot -Tpng > {output}"
