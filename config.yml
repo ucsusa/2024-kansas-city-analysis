@@ -5,6 +5,8 @@ county: 'Wyandotte'
 # historical data
 census_year: 2020
 census_level: 'tract'
+usrdb_start_date: "2024-07-23"  # today?
+usrdb_future_date: "2099-01-01"  # some date in the future, replaces NaT values
 
 # building data options
 building_data_options:

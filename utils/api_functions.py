@@ -13,6 +13,43 @@ _TIGER_URL = "https://www2.census.gov/geo/tiger/"
 _RETAIL_SERVICE_URL = ("https://services1.arcgis.com/Hp6G80Pky0om7QvQ/"
                       "arcgis/rest/services/Retail_Service_Territories/"
                       "FeatureServer/0/query?")
+AVAILABLE_COLUMNS = [
+"ID",
+"NAME",
+"ADDRESS",
+"CITY",
+"STATE",
+"ZIP",
+"TELEPHONE",
+"TYPE",
+"COUNTRY",
+"NAICS_CODE",
+"NAICS_DESC",
+"SOURCE",
+"SOURCEDATE",
+"VAL_METHOD",
+"VAL_DATE",
+"WEBSITE",
+"REGULATED",
+"CNTRL_AREA",
+"PLAN_AREA",
+"HOLDING_CO",
+"SUMMR_PEAK",
+"WINTR_PEAK",
+"SUMMER_CAP",
+"WINTER_CAP",
+"NET_GEN",
+"PURCHASED",
+"NET_EX",
+"RETAIL_MWH",
+"WSALE_MWH",
+"TOTAL_MWH",
+"TRANS_MWH",
+"CUSTOMERS",
+"YEAR",
+"Shape__Area",
+"Shape__Length"]
+
 RETAIL_SERVICE_COLUMNS = ["CNTRL_AREA",
                           "PLAN_AREA",
                           "HOLDING_CO",
@@ -78,6 +115,17 @@ def get_retail_service_area(state_name=None,
     except AssertionError as error:
         raise error
     
+    if columns != RETAIL_SERVICE_COLUMNS:
+        for col in columns:
+            if col not in AVAILABLE_COLUMNS:
+                print(f"{col} not in available columns. Must be one of:\n {AVAILABLE_COLUMNS}")
+                raise KeyError
+    
     state_field = f"where=STATE%20%3D%20'{state.abbr}'" if state_name else ""
     crs_field = f"outSR={crs}"
     format_field = f"f=json"
+    return_fields = f"outFields={','.join(columns)}"
+    
+    params = "&".join([state_field, return_fields, crs_field, format_field])
+    
+    return _RETAIL_SERVICE_URL+params

@@ -8,7 +8,9 @@ load_dotenv(str(env_file))
 rule targets:
     input: 
         sfa = "data/timeseries/single-family_attached_load.csv",
-        res_structures = "data/residential_buildings.csv"
+        res_structures = "data/residential_buildings.csv",
+        rates = "data/usrdb_rates.csv",
+        dag = "dag.png"
 
 rule retrieve_spatial_lut:
     output: 
@@ -25,6 +27,20 @@ rule retrieve_armourdale_shape:
     output: 
         armourdale = "data/spatial_data/armourdale_shape.gpkg"
     script: "scripts/retrieve_armourdale.py"
+
+rule retrieve_electric_utility:
+    input: 
+      cutout="data/spatial_data/armourdale_shape.gpkg"
+    output:
+      utility="data/spatial_data/electric_utility.gpkg"
+    script: "scripts/retrieve_electric_utility.py"
+
+rule retrieve_usrdb:
+    input: 
+        utility="data/spatial_data/electric_utility.gpkg"
+    output: 
+        rates="data/usrdb_rates.csv"
+    script: "scripts/retrieve_usrdb.py"
 
 rule calculate_res_structures:
     input: 
