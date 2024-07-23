@@ -7,7 +7,7 @@ load_dotenv(str(env_file))
 
 rule targets:
     input: 
-        sfa = "data/timeseries/single-family_attached_load.csv",
+        sfa = "data/timeseries/residential_load.csv",
         res_structures = "data/residential_buildings.csv",
         rates = "data/usrdb_rates.csv",
         dag = "dag.png"
@@ -55,7 +55,7 @@ rule retrieve_res_load:
         spatial_lut = "data/spatial_data/spatial_lut.csv",
         res_structures = "data/residential_buildings.csv"
     output: 
-        sfa = "data/timeseries/single-family_attached_load.csv"
+        sfa = "data/timeseries/residential_load.csv"
     script: "scripts/retrieve_res_load.py"
     
 rule build_dag:

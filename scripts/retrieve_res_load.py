@@ -34,6 +34,7 @@ if __name__ == "__main__":
     state = states.lookup(state_name)
     county = snakemake.config['county']
     building_opts = snakemake.config['building_data_options']
+    sector_buildings = building_opts['building_types']
     
     
     # load spatial lut
@@ -47,12 +48,25 @@ if __name__ == "__main__":
     
     # puma_id = county_and_puma.split(',')[-1].replace(' ','')
     
-    # for bldg_type in building_opts['building_types']:
-    for bldg_type in ["single-family_attached"]:
-        bldg_url = create_resstock_url(state_abbr=state.abbr, 
-                                       puma_id=county_and_puma, 
-                                       building_type=bldg_type)
-        bldg_df = pd.read_csv(bldg_url)
+    # for sector in list(sectors_buildings.keys()):
+    for sector in ['residential']:
+        building_types = sector_buildings[sector]
+        sector_frames = []
+        for bldg_type in building_types:
+        # for bldg_type in ["single-family_attached"]:
+            bldg_url = create_resstock_url(state_abbr=state.abbr, 
+                                        puma_id=county_and_puma, 
+                                        building_type=bldg_type)
+            bldg_df = pd.read_csv(bldg_url, 
+                                  parse_dates=True, 
+                                  index_col='timestamp',
+                                  usecols=columns)
+            
+            bldg_df.rename(columns={'out.electricity.total.energy_consumption':bldg_type},
+                           inplace=True)
+            
+            sector_frames.append(bldg_df)
         
-        bldg_df[columns].to_csv(f"data/timeseries/{bldg_type}_load.csv")
+        sector_ts = pd.concat(sector_frames, axis=1)
+        sector_ts.to_csv(f"data/timeseries/{sector}_load.csv")
     

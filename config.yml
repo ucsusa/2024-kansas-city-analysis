@@ -15,11 +15,12 @@ building_data_options:
   weather_version: "tmy3"  # or "amy2018"
   release_version: 1
   building_types:
-    - multi-family_with_2_-_4_units
-    - multi-family_with_5plus_units
-    - single-family_attached
-    - single-family_detached
-    - mobile_home
+    residential:
+      - multi-family_with_2_-_4_units
+      - multi-family_with_5plus_units
+      - single-family_attached
+      - single-family_detached
+      - mobile_home
 
 energy_sectors:
   - residential
