@@ -10,6 +10,7 @@ rule targets:
         sfa = "data/timeseries/residential_load.csv",
         res_structures = "data/residential_buildings.csv",
         rates = "data/usrdb_rates.csv",
+        project_sunroof = f"data/spatial_data/project-sunroof-census_tract.csv",
         dag = "dag.png"
 
 rule retrieve_spatial_lut:
@@ -19,8 +20,18 @@ rule retrieve_spatial_lut:
 
 rule retrieve_census_data:
     output:
-        census_data = "data/spatial_data/county_census_data.gpkg"
+        census_data = "data/spatial_data/county_census_data.gpkg",
+        state_blockgroups = f"data/spatial_data/{config['state'].lower()}_blockgroups.gpkg",
+        county_blockgroups = f"data/spatial_data/{config['county'].lower()}_blockgroups.gpkg"
     script: "scripts/retrieve_census_data.py"
+
+rule retrieve_project_sunroof:
+    input: 
+        blockgroups = f"data/spatial_data/{config['state'].lower()}_blockgroups.gpkg"
+    output: 
+        project_sunroof = "data/spatial_data/project-sunroof-census_tract.csv",
+        local_potential = f"data/spatial_data/{config['state'].lower()}_rooftop_potential.gpkg"
+    script: "scripts/retrieve_project_sunroof.py"
 
 # a bespoke step to make this analysis specific to armourdale
 rule retrieve_armourdale_shape:

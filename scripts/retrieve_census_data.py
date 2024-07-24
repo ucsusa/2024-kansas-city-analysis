@@ -10,7 +10,7 @@ import yaml
 
 sys.path.append("utils/")
 
-from api_functions import *
+from api_functions import get_tiger_files, get_county_fips
 
 
 column_names = {
@@ -32,9 +32,7 @@ if __name__ == "__main__":
     state_name = snakemake.config['state']
     state = states.lookup(state_name)
     county = snakemake.config['county']
-    counties = pd.read_html((f"https://en.wikipedia.org/wiki/"
-                             f"List_of_counties_in_{state_name.capitalize()}"))[1].set_index('County')
-    county_fips = counties.at[county.capitalize() + ' County','FIPS code[3]']
+    county_fips = get_county_fips(state_name, county)
     census_year = int(snakemake.config['census_year'])
     
     
@@ -77,6 +75,9 @@ if __name__ == "__main__":
     county_merge = county_merge.drop(columns=multi_family+many_family)
     
     county_merge.to_file(snakemake.output.census_data, driver="GPKG")
+    
+    state_map.to_file(snakemake.output.state_blockgroups, driver="GPKG")
+    county_bg.to_file(snakemake.output.county_blockgroups, driver="GPKG")
 
 
     

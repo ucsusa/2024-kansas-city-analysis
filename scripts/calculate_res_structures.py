@@ -12,7 +12,8 @@ if __name__ == "__main__":
     armourdale_bg = census_data.sjoin(armourdale, how='inner', predicate='within')
     
     # replace `armourdale_bg` with `census_data` for a non-armourdale analysis.
-    building_data = armourdale_bg[building_opts['building_types']]\
+    building_types = building_opts['building_types']['residential']
+    building_data = armourdale_bg[building_types]\
                     .sum()\
                     .to_frame()\
                     .rename(columns={0:'n_units'})
