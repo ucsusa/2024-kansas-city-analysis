@@ -102,9 +102,6 @@ def get_tiger_files(year, state_abbr, feature='tract'):
     return geo_df
 
 
-
-
-
 def get_retail_service_area(state_name=None,
                             crs=4326,
                             columns=RETAIL_SERVICE_COLUMNS):
@@ -129,3 +126,39 @@ def get_retail_service_area(state_name=None,
     params = "&".join([state_field, return_fields, crs_field, format_field])
     
     return _RETAIL_SERVICE_URL+params
+
+
+def get_county_fips(state_name, county_name):
+    """
+    This function retrieves the FIPS code for a county given
+    the name of the county. The `county_name` parameter must
+    be the name only. It should not have "county" at the end.
+    
+    Example:
+
+    Parameters
+    ----------
+    state_name : str
+        The name of the state. E.g., "Kansas" or "Idaho"
+    county_name : str
+        The name of the county. E.g., "Cook", "Wyandotte."
+        Should not include "county." So, "Cook County" would be
+        incorrect.
+
+    Raises
+    ------
+    error
+        Assertion error if the state name cannot be found.
+    """
+    try:
+        state = states.lookup(state_name)
+        assert state_name, f"{state_name} is not a state in the U.S."
+    except AssertionError as error:
+        raise error
+    
+    counties = pd.read_html((f"https://en.wikipedia.org/wiki/"
+                             f"List_of_counties_in_{state_name.capitalize()}"))[1].set_index('County')
+    county_fips = counties.at[county_name.capitalize() + ' County',
+                              counties.columns[0]]
+    
+    return county_fips
