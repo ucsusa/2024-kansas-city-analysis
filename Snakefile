@@ -63,10 +63,10 @@ rule calculate_res_structures:
 
 rule retrieve_res_load:
     input:
-        spatial_lut = "data/spatial_data/spatial_lut.csv",
-        res_structures = "data/residential_buildings.csv"
+        spatial_lut = "data/spatial_data/spatial_lut.csv"
     output: 
-        sfa = "data/timeseries/residential_load.csv"
+        elec_load = "data/timeseries/residential_elec_load.csv",
+        heat_load = "data/timeseries/residential_heat_load.csv"
     script: "scripts/retrieve_res_load.py"
     
 rule build_dag:

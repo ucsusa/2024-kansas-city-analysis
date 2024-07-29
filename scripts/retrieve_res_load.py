@@ -26,7 +26,9 @@ def create_resstock_url(state_abbr,
 
 if __name__ == "__main__":
     
-    columns = ['timestamp', 'out.electricity.total.energy_consumption']
+    time_col = 'timestamp'
+    elec_col = 'out.electricity.total.energy_consumption'
+    heat_col = 'out.natural_gas.heating.energy_consumption'
     
     
     # gather config options
@@ -46,27 +48,38 @@ if __name__ == "__main__":
     county_and_puma = lut[((lut['state_abbreviation']==state.abbr)\
         & (lut['resstock_county_id'] == f"{state.abbr}, {county.capitalize()} County"))]['nhgis_puma_gisjoin'].unique()[0]
     
-    # puma_id = county_and_puma.split(',')[-1].replace(' ','')
-    
-    # for sector in list(sectors_buildings.keys()):
     for sector in ['residential']:
         building_types = sector_buildings[sector]
-        sector_frames = []
+        elec_frames = []
+        heat_frames = []
         for bldg_type in building_types:
-        # for bldg_type in ["single-family_attached"]:
             bldg_url = create_resstock_url(state_abbr=state.abbr, 
                                         puma_id=county_and_puma, 
                                         building_type=bldg_type)
             bldg_df = pd.read_csv(bldg_url, 
-                                  parse_dates=True, 
-                                  index_col='timestamp',
-                                  usecols=columns)
+                                  parse_dates=True,
+                                  index_col=time_col,
+                                  usecols=[time_col,
+                                           elec_col,
+                                           heat_col])
             
-            bldg_df.rename(columns={'out.electricity.total.energy_consumption':bldg_type},
+            print(f"Accessing {bldg_url}")
+            
+            heat_df = bldg_df[[heat_col]]
+            elec_df = bldg_df[[elec_col]]
+            
+            elec_df.rename(columns={elec_col:bldg_type},
                            inplace=True)
             
-            sector_frames.append(bldg_df)
+            heat_df.rename(columns={heat_col:bldg_type},
+                           inplace=True)
+            
+            elec_frames.append(elec_df)
+            heat_frames.append(heat_df)
         
-        sector_ts = pd.concat(sector_frames, axis=1)
-        sector_ts.to_csv(f"data/timeseries/{sector}_load.csv")
+        elec_ts = pd.concat(elec_frames, axis=1)
+        elec_ts.to_csv(f"data/timeseries/{sector}_elec_load.csv")
+        
+        heat_ts = pd.concat(heat_frames, axis=1)
+        heat_ts.to_csv(f"data/timeseries/{sector}_heat_load.csv")
     
