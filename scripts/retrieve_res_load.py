@@ -2,18 +2,20 @@ import pandas as pd
 import geopandas as gpd
 from us import states
 
-def create_resstock_url(state_abbr, 
-                        puma_id, 
+
+BASE_URL = (
+    "https://oedi-data-lake.s3.amazonaws.com/nrel-pds-building-stock"
+    "/end-use-load-profiles-for-us-building-stock")
+
+
+def create_resstock_url(state_abbr,
+                        puma_id,
                         building_type,
                         year=2021,
                         product='resstock', 
                         weather_version='tmy3', 
                         release=1, 
                         ):
-    
-    BASE_URL = ("https://oedi-data-lake.s3.amazonaws.com/nrel-pds-building-stock"
-                "/end-use-load-profiles-for-us-building-stock")
-    
     data_route = (f"/{year}"
                   f"/{product}_{weather_version}_release_{release}"
                    "/timeseries_aggregates/by_puma"
@@ -22,6 +24,51 @@ def create_resstock_url(state_abbr,
     file = f"{puma_id.lower()}-{building_type}.csv"
     
     return BASE_URL+data_route+file
+
+
+def create_weather_url(puma_id,
+                        year=2021,
+                        product='resstock',
+                        weather_version='tmy3',
+                        release=1,
+                        ):
+
+    data_route = (f"/{year}"
+                  f"/{product}_{weather_version}_release_{release}"
+                  "/weather/tmy3/")
+
+    file = f"{puma_id.upper()}.csv"
+
+    return BASE_URL + data_route + file
+
+
+def process_weather_timeseries(data_url, tmy=True, weather_year=2018):
+    """
+    This function processes timeseries weather data from NREL's
+    ResStock and ComStock. If the data are from the typical
+    meteorological year (TMY), then artificial timestamps will
+    be applied.
+    """
+    
+    df = pd.read_csv(data_url)
+    df.columns = ['date_time', 
+                'temp_db', 
+                'rel_humidity',
+                'wind_speed', 
+                'wind_direction',
+                'ghi', 
+                'dni',
+                'dhi']
+    if tmy:
+        timestamps = pd.date_range(start=f'{weather_year}-01-01', 
+                                   freq='h', 
+                                   periods=8760)
+        df.index = timestamps
+    else:
+        msg = "Processing non-TMY weather data has not been implemented."
+        raise NotImplementedError(msg)
+    
+    return df
 
 
 if __name__ == "__main__":
@@ -41,13 +88,21 @@ if __name__ == "__main__":
     
     # load spatial lut
     lut = pd.read_csv(snakemake.input.spatial_lut)
+
+    # get the PUMA ID this method is unstable, since some counties might contain
+    # multiple PUMAs
+    region = lut.loc[((lut['state_abbreviation']==state.abbr) 
+                                & (lut['resstock_county_id']==f"{state.abbr}, {county.capitalize()} County"))]
+    county_and_puma = region.loc[:,'nhgis_puma_gisjoin'].unique()[0]
+    county_gis_join = region.loc[:,'nhgis_county_gisjoin'].unique()[0]
+    # puma_id = county_and_puma.split(',')[-1].replace(' ','')
+
+    weather_url = create_weather_url(puma_id=county_gis_join)
+    weather_data = process_weather_timeseries(weather_url)
     
+    weather_data.to_csv(snakemake.output.weather)
     
-    # get the PUMA ID
-    # this method is unstable, since some counties might contain multiple PUMAs
-    county_and_puma = lut[((lut['state_abbreviation']==state.abbr)\
-        & (lut['resstock_county_id'] == f"{state.abbr}, {county.capitalize()} County"))]['nhgis_puma_gisjoin'].unique()[0]
-    
+    # for sector in list(sectors_buildings.keys()):
     for sector in ['residential']:
         building_types = sector_buildings[sector]
         elec_frames = []
