@@ -1,7 +1,7 @@
 import pandas as pd
 import geopandas as gpd
 from us import states
-
+from tqdm import tqdm
 
 BASE_URL = (
     "https://oedi-data-lake.s3.amazonaws.com/nrel-pds-building-stock"
@@ -37,7 +37,7 @@ def create_weather_url(puma_id,
                   f"/{product}_{weather_version}_release_{release}"
                   "/weather/tmy3/")
 
-    file = f"{puma_id.upper()}.csv"
+    file = f"{puma_id.upper()}_{weather_version}.csv"
 
     return BASE_URL + data_route + file
 
@@ -97,17 +97,25 @@ if __name__ == "__main__":
     county_gis_join = region.loc[:,'nhgis_county_gisjoin'].unique()[0]
     # puma_id = county_and_puma.split(',')[-1].replace(' ','')
 
+
+    print("Retrieving weather data...")
     weather_url = create_weather_url(puma_id=county_gis_join)
     weather_data = process_weather_timeseries(weather_url)
     
     weather_data.to_csv(snakemake.output.weather)
+    print("Weather data retrieved.")
     
-    # for sector in list(sectors_buildings.keys()):
-    for sector in ['residential']:
+    outer_pbar = tqdm(list(sector_buildings.keys()), position=0, leave=True)
+    all_frames = []
+    for sector in outer_pbar:
+        outer_pbar.set_description(f"{sector.upper()}")
         building_types = sector_buildings[sector]
+        inner_pbar = tqdm(building_types, position=1, leave=True)
+    
         elec_frames = []
         heat_frames = []
-        for bldg_type in building_types:
+        for bldg_type in inner_pbar:
+            inner_pbar.set_description(f"Retrieving {bldg_type}")
             bldg_url = create_resstock_url(state_abbr=state.abbr, 
                                         puma_id=county_and_puma, 
                                         building_type=bldg_type)
@@ -117,17 +125,12 @@ if __name__ == "__main__":
                                   usecols=[time_col,
                                            elec_col,
                                            heat_col])
-            
-            print(f"Accessing {bldg_url}")
-            
             heat_df = bldg_df[[heat_col]]
             elec_df = bldg_df[[elec_col]]
             
-            elec_df.rename(columns={elec_col:bldg_type},
-                           inplace=True)
+            elec_df = elec_df.rename(columns={elec_col:bldg_type})
             
-            heat_df.rename(columns={heat_col:bldg_type},
-                           inplace=True)
+            heat_df = heat_df.rename(columns={heat_col:bldg_type})
             
             elec_frames.append(elec_df)
             heat_frames.append(heat_df)

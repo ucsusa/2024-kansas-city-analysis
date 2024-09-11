@@ -66,8 +66,8 @@ rule retrieve_res_load:
         spatial_lut = "data/spatial_data/spatial_lut.csv"
     output: 
         elec_load = "data/timeseries/residential_elec_load.csv",
-        heat_load = "data/timeseries/residential_heat_load.csv"
-        weather = "data/timeseries/weather_year.csv",
+        heat_load = "data/timeseries/residential_heat_load.csv",
+        weather = "data/timeseries/weather_year.csv"
     script: "scripts/retrieve_res_load.py"
     
 rule build_dag:
