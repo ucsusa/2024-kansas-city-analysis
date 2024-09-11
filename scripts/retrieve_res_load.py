@@ -121,10 +121,9 @@ if __name__ == "__main__":
                                         building_type=bldg_type)
             bldg_df = pd.read_csv(bldg_url, 
                                   parse_dates=True,
-                                  index_col=time_col,
-                                  usecols=[time_col,
-                                           elec_col,
-                                           heat_col])
+                                  index_col=time_col)
+            bldg_df.to_csv(f"data/timeseries/{sector}_{bldg_type}.csv")
+            
             heat_df = bldg_df[[heat_col]]
             elec_df = bldg_df[[elec_col]]
             
