@@ -24,6 +24,7 @@ rule targets:
         project_sunroof = f"data/spatial_data/project-sunroof-census_tract.csv",
         utility="data/spatial_data/electric_utility.gpkg",
         lead_data = f"data/spatial_data/{state_abbr}-2018-LEAD-data/{state_abbr} AMI Census Tracts 2018.csv",
+        res_energy_expenses = "data/armourdale_energy_expenses.csv",
         dag = "dag.png"
 
 rule retrieve_spatial_lut:
@@ -91,6 +92,13 @@ rule retrieve_lead_data:
         lead_data = f"data/spatial_data/{state_abbr}-2018-LEAD-data/{state_abbr} AMI Census Tracts 2018.csv",
         lead_community = "data/spatial_data/armourdale_lead.csv"
     script: "scripts/retrieve_lead_data.py"
+
+rule pre_calculate_energy_expenses:
+    input:
+        lead_community = "data/spatial_data/armourdale_lead.csv" 
+    output: 
+        res_energy_expenses = "data/armourdale_energy_expenses.csv"
+    script: "scripts/pre_calculate_energy_expenses.py"
     
 rule build_dag:
     input: "Snakefile"
