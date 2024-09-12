@@ -124,8 +124,9 @@ if __name__ == "__main__":
                                   index_col=time_col)
             bldg_df.to_csv(f"data/timeseries/{sector}_{bldg_type}.csv")
             
-            heat_df = bldg_df[[heat_col]]
-            elec_df = bldg_df[[elec_col]]
+            num_units = bldg_df['units_represented'].unique()[0]
+            heat_df = bldg_df[[heat_col]] / num_units
+            elec_df = bldg_df[[elec_col]] / num_units
             
             elec_df = elec_df.rename(columns={elec_col:bldg_type})
             
