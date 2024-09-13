@@ -48,3 +48,4 @@ dependencies:
       - census
       - streamlit
       - vresutils
+      - hplib
