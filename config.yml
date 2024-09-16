@@ -1,6 +1,7 @@
 # geographic data
 state: 'Kansas'
 county: 'Wyandotte'
+community_name: 'Armourdale'
 
 # historical data
 census_year: 2020

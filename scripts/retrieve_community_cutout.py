@@ -12,6 +12,6 @@ if __name__ == "__main__":
     armourdale_ward = '06'
     armourdale = kck_wards[kck_wards['WARD'] == armourdale_ward].dissolve("CITY").reset_index(drop=False)
 
-    armourdale = armourdale[['CITY','geometry','WARD']]
+    cutout = armourdale[['CITY','geometry','WARD']]
     
-    armourdale.to_file(snakemake.output.armourdale, driver="GPKG")
+    cutout.to_file(snakemake.output.community, driver="GPKG")
