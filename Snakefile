@@ -25,6 +25,7 @@ rule targets:
         utility="data/spatial_data/electric_utility.gpkg",
         lead_data = f"data/spatial_data/{state_abbr}-2018-LEAD-data/{state_abbr} AMI Census Tracts 2018.csv",
         res_energy_expenses = "data/armourdale_energy_expenses.csv",
+        zoning_data = f"data/spatial_data/armourdale/zoning.gpkg",
         dag = "dag.png"
 
 rule retrieve_spatial_lut:
@@ -99,6 +100,13 @@ rule pre_calculate_energy_expenses:
     output: 
         res_energy_expenses = "data/armourdale_energy_expenses.csv"
     script: "scripts/pre_calculate_energy_expenses.py"
+
+rule retrieve_community_spatial_data:
+    input: 
+        community_cutout = "data/spatial_data/armourdale_shape.gpkg"
+    output: 
+        zoning_data = f"data/spatial_data/armourdale/zoning.gpkg"
+    script: "scripts/retrieve_shapefiles.py"
     
 rule build_dag:
     input: "Snakefile"
