@@ -9,6 +9,11 @@ census_level: 'tract'
 usrdb_start_date: "2024-07-23"  # today?
 usrdb_future_date: "2099-01-01"  # some date in the future, replaces NaT values
 
+# price data
+retail_price_elec: 0.1129  # from google, $/kWh
+# https://www.kansasgasservice.com//media/KGS/Tariffs/20-RSS.pdf
+retail_price_gas: 2.3485 # $/Mcf, 0.0080126123 $/kWh
+
 # model options
 topology: "sectoral"  # or building type?
 
