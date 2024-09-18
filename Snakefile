@@ -28,6 +28,7 @@ rule targets:
         lead_data = f"data/spatial_data/{state_abbr}-2018-LEAD-data/{state_abbr} AMI Census Tracts 2018.csv",
         res_energy_expenses = f"data/{community_name.lower()}_energy_expenses.csv",
         zoning_data = f"data/spatial_data/{community_name.lower()}/zoning.gpkg",
+        rescaled_elec_load = "data/timeseries/residential_elec_load_rescaled.csv",
         dag = "dag.png"
 
 rule retrieve_spatial_lut:
@@ -97,7 +98,7 @@ rule retrieve_lead_data:
         lead_community = f"data/spatial_data/{community_name.lower()}_lead.csv"
     script: "scripts/retrieve_lead_data.py"
 
-rule pre_calculate_energy_expenses:
+rule calculate_historical_expenses:
     input:
         lead_community = f"data/spatial_data/{community_name.lower()}_lead.csv" 
     output: 
@@ -110,6 +111,15 @@ rule retrieve_community_spatial_data:
     output: 
         zoning_data = f"data/spatial_data/{community_name.lower()}/zoning.gpkg"
     script: "scripts/retrieve_shapefiles.py"
+
+rule calculate_rescaled_load:
+    input: 
+        res_energy_expenses = f"data/{community_name.lower()}_energy_expenses.csv",
+        elec_load = "data/timeseries/residential_elec_load.csv",
+        res_structures = "data/residential_buildings.csv"
+    output: 
+        rescaled_elec_load = "data/timeseries/residential_elec_load_rescaled.csv"
+    script: "scripts/calculate_residential_load.py"
     
 rule build_dag:
     input: "Snakefile"
