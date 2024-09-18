@@ -15,7 +15,7 @@ URLS = {
 
 if __name__ == "__main__":
     
-    community_cutout = gpd.read_file(snakemake.input.community_cutout)
+    community_cutout = gpd.read_file(snakemake.input.community)
     
     for name, url in URLS.items():
         gdf = gpd.read_file(url)

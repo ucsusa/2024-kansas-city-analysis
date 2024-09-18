@@ -44,10 +44,11 @@ rule retrieve_census_data:
 
 rule retrieve_project_sunroof:
     input: 
-        blockgroups = f"data/spatial_data/{state.lower()}_blockgroups.gpkg"
+        blockgroups = f"data/spatial_data/{state.lower()}_blockgroups.gpkg",
+        community = f"data/spatial_data/{community_name.lower()}_shape.gpkg"
     output: 
         project_sunroof = "data/spatial_data/project-sunroof-census_tract.csv",
-        local_potential = f"data/spatial_data/{state.lower()}_rooftop_potential.gpkg"
+        local_potential = f"data/spatial_data/{community_name.lower()}_rooftop_potential.gpkg"
     script: "scripts/retrieve_project_sunroof.py"
 
 # a bespoke step to make this analysis specific to community
@@ -58,7 +59,7 @@ rule retrieve_community_shape:
 
 rule retrieve_electric_utility:
     input: 
-      cutout=f"data/spatial_data/{community_name.lower()}_shape.gpkg""
+      cutout=f"data/spatial_data/{community_name.lower()}_shape.gpkg"
     output:
       utility="data/spatial_data/electric_utility.gpkg"
     script: "scripts/retrieve_electric_utility.py"
@@ -89,7 +90,7 @@ rule retrieve_res_load:
 
 rule retrieve_lead_data:
     input: 
-        community = f"data/spatial_data/{community_name.lower()}_shape.gpkg"
+        community = f"data/spatial_data/{community_name.lower()}_shape.gpkg",
         county_blockgroups = f"data/spatial_data/{config['county'].lower()}_blockgroups.gpkg"
     output: 
         lead_data = f"data/spatial_data/{state_abbr}-2018-LEAD-data/{state_abbr} AMI Census Tracts 2018.csv",
@@ -100,7 +101,7 @@ rule pre_calculate_energy_expenses:
     input:
         lead_community = f"data/spatial_data/{community_name.lower()}_lead.csv" 
     output: 
-        res_energy_expenses = "data/community_energy_expenses.csv"
+        res_energy_expenses = f"data/{community_name.lower()}_energy_expenses.csv"
     script: "scripts/pre_calculate_energy_expenses.py"
 
 rule retrieve_community_spatial_data:

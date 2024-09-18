@@ -18,3 +18,7 @@ if __name__ == "__main__":
     solar_gdf = census_tract.merge(df, on='region_name')
     solar_gdf.to_file(snakemake.output.local_potential, driver='GPKG')
     
+    #get cutout
+    community_cutout = gpd.read_file(snakemake.input.community)
+    combined = solar_gdf.sjoin(community_cutout, predicate='within')
+    

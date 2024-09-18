@@ -7,13 +7,13 @@ if __name__ == "__main__":
     building_opts = snakemake.config['building_data_options']
     
     
-    # specific to armourdale; selecting only block groups within armourdale
-    armourdale = gpd.read_file(snakemake.input.armourdale)
-    armourdale_bg = census_data.sjoin(armourdale, how='inner', predicate='within')
+    # specific to armourdale; selecting only block groups within the community
+    community = gpd.read_file(snakemake.input.community)
+    community_bg = census_data.sjoin(community, how='inner', predicate='within')
     
-    # replace `armourdale_bg` with `census_data` for a non-armourdale analysis.
+    # replace `community_bg` with `census_data` for a non-localized analysis.
     building_types = building_opts['building_types']['residential']
-    building_data = armourdale_bg[building_types]\
+    building_data = community_bg[building_types]\
                     .sum()\
                     .to_frame()\
                     .rename(columns={0:'n_units'})
