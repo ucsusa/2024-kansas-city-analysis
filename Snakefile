@@ -103,7 +103,7 @@ rule calculate_historical_expenses:
         lead_community = f"data/spatial_data/{community_name.lower()}_lead.csv" 
     output: 
         res_energy_expenses = f"data/{community_name.lower()}_energy_expenses.csv"
-    script: "scripts/pre_calculate_energy_expenses.py"
+    script: "scripts/calculate_historical_expenses.py"
 
 rule retrieve_community_spatial_data:
     input: 
@@ -116,9 +116,11 @@ rule calculate_rescaled_load:
     input: 
         res_energy_expenses = f"data/{community_name.lower()}_energy_expenses.csv",
         elec_load = "data/timeseries/residential_elec_load.csv",
+        heat_load = "data/timeseries/residential_elec_load.csv",
         res_structures = "data/residential_buildings.csv"
     output: 
-        rescaled_elec_load = "data/timeseries/residential_elec_load_rescaled.csv"
+        rescaled_elec_load = "data/timeseries/residential_elec_load_rescaled.csv",
+        rescaled_heat_load = "data/timeseries/residential_heat_load_rescaled.csv",
     script: "scripts/calculate_residential_load.py"
     
 rule build_dag:
