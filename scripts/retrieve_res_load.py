@@ -12,18 +12,18 @@ def create_resstock_url(state_abbr,
                         puma_id,
                         building_type,
                         year=2021,
-                        product='resstock', 
-                        weather_version='tmy3', 
-                        release=1, 
+                        product='resstock',
+                        weather_version='tmy3',
+                        release=1,
                         ):
     data_route = (f"/{year}"
                   f"/{product}_{weather_version}_release_{release}"
-                   "/timeseries_aggregates/by_puma"
+                  "/timeseries_aggregates/by_puma"
                   f"/state={state_abbr}/")
 
     file = f"{puma_id.lower()}-{building_type}.csv"
-    
-    return BASE_URL+data_route+file
+
+    return BASE_URL + data_route + file
 
 
 def create_weather_url(puma_id,
@@ -84,8 +84,7 @@ if __name__ == "__main__":
     county = snakemake.config['county']
     building_opts = snakemake.config['building_data_options']
     sector_buildings = building_opts['building_types']
-    
-    
+
     # load spatial lut
     lut = pd.read_csv(snakemake.input.spatial_lut)
 

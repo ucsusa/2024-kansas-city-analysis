@@ -2,7 +2,7 @@ import geopandas as gpd
 import pandas as pd
 
 if __name__ == "__main__":
-    
+
     census_data = gpd.read_file(snakemake.input.census_data)
     building_opts = snakemake.config['building_data_options']
     
@@ -19,6 +19,3 @@ if __name__ == "__main__":
                     .rename(columns={0:'n_units'})
 
     building_data.to_csv(snakemake.output.res_structures)
-    
-    
-    
