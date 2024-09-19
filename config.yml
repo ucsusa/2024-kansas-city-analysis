@@ -1,0 +1,33 @@
+# geographic data
+state: 'Kansas'
+county: 'Wyandotte'
+
+# historical data
+census_year: 2020
+census_level: 'tract'
+usrdb_start_date: "2024-07-23"  # today?
+usrdb_future_date: "2099-01-01"  # some date in the future, replaces NaT values
+
+# building data options
+building_data_options:
+  resstock_year: 2021  # DO NOT CHANGE
+  comstock_year: 2021  # DO NOT CHANGE
+  weather_version: "tmy3"  # or "amy2018"
+  release_version: 1
+  building_types:
+    residential:
+      - multi-family_with_2_-_4_units
+      - multi-family_with_5plus_units
+      - single-family_attached
+      - single-family_detached
+      - mobile_home
+
+energy_sectors:
+  - residential
+  # - commercial  # pending implementation
+  # - industrial  # pending data availability
+
+
+# geographic options
+geographic_crs: 4326  # for using lat/lon; EPSG code
+projected_crs: 5070  # for doing calculations; EPSG code
