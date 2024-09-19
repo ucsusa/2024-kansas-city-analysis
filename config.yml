@@ -14,8 +14,18 @@ retail_price_elec: 0.1129  # from google, $/kWh
 # https://www.kansasgasservice.com//media/KGS/Tariffs/20-RSS.pdf
 retail_price_gas: 2.3485 # $/Mcf, 0.0080126123 $/kWh
 
+# ATB cost options
+atb_params:
+    atb_year: 2023  # the ATB publication year // DO NOT CHANGE
+    case: 'Market'  # 'R&D'
+    scenario: 'Moderate'  # 'Conservative', 'Advanced'
+    scale: 'Residential'  # 'Utility', 'Commercial'
+    maturity: 'Y'  # 'N'
+    crp: 30  # '20'
+    cost_year: 2025  # Any year 2020-2050
+
 # model options
-topology: "sectoral"  # or building type?
+topology: "sectoral"  # or building type // NOT IMPLEMENTED
 
 # building data options
 building_data_options:
@@ -36,7 +46,6 @@ building_data_options:
 energy_sectors:
   - residential
   # - commercial  # pending implementation
-
 
 # geographic options
 geographic_crs: 4326  # for using lat/lon; EPSG code

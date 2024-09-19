@@ -98,6 +98,11 @@ rule retrieve_lead_data:
         lead_community = f"data/spatial_data/{community_name.lower()}_lead.csv"
     script: "scripts/retrieve_lead_data.py"
 
+rule retrieve_nrel_costs:
+    output: 
+        costs = "data/technology_costs.csv"
+    script: "scripts/retrieve_nrel_costs"
+
 rule calculate_historical_expenses:
     input:
         lead_community = f"data/spatial_data/{community_name.lower()}_lead.csv" 
