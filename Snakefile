@@ -29,6 +29,7 @@ rule targets:
         res_energy_expenses = f"data/{community_name.lower()}_energy_expenses.csv",
         zoning_data = f"data/spatial_data/{community_name.lower()}/zoning.gpkg",
         rescaled_elec_load = "data/timeseries/residential_elec_load_rescaled.csv",
+        costs = "data/technology_costs.csv",
         dag = "dag.png"
 
 rule retrieve_spatial_lut:
@@ -101,7 +102,7 @@ rule retrieve_lead_data:
 rule retrieve_nrel_costs:
     output: 
         costs = "data/technology_costs.csv"
-    script: "scripts/retrieve_nrel_costs"
+    script: "scripts/retrieve_nrel_costs.py"
 
 rule calculate_historical_expenses:
     input:
