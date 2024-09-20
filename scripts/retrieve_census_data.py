@@ -74,8 +74,7 @@ if __name__ == "__main__":
     # combine structure types by unit; harmonize with NREL resstock
     multi_family = ['2 units','3-4_units']
     many_family = ['5-9_units', '10-19_units', '20-49_units','50plus_units']
-    
-    breakpoint()
+
     county_merge['multi-family_with_2_-_4_units'] = county_merge[multi_family].sum(axis=1)
     county_merge['multi-family_with_5plus_units'] = county_merge[many_family].sum(axis=1)
     county_merge = county_merge.drop(columns=multi_family+many_family)
