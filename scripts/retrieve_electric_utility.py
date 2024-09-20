@@ -1,10 +1,9 @@
-from api_functions import get_retail_service_area
 import pandas as pd
 import geopandas as gpd
 import sys
 
 sys.path.append("utils")
-
+from api_functions import get_retail_service_area
 
 if __name__ == "__main__":
     state_name = snakemake.config['state']
