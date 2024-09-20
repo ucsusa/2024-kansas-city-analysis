@@ -36,7 +36,7 @@ jobs:
         conda config --env --set pip_interop_enabled True
 
     - name: Update environment
-      run: conda env update -n kansas-city -f environment.yml
+      run: mamba env update -n kansas-city -f environment.yml
 
     - name: Create .env file
       run: |

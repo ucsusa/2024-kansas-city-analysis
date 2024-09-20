@@ -1,6 +1,6 @@
 import geopandas as gpd
-import pandas as pd
-from pathlib import Path
+from pyogrio.errors import DataSourceError
+from tqdm import tqdm
 
 
 URLS = {
@@ -17,12 +17,15 @@ if __name__ == "__main__":
     
     community_cutout = gpd.read_file(snakemake.input.community)
     
-    for name, url in URLS.items():
-        gdf = gpd.read_file(url)
-        gdf = gdf.to_crs(snakemake.config['geographic_crs'])
-        
-        gdf_cutout = gdf.sjoin(community_cutout, predicate='within')
-        print(f"data/spatial_data/armourdale/{name}.gpkg")
-        
-        gdf.to_file(f"data/spatial_data/armourdale/{name}.gpkg", driver="GPKG")
-        
+    pbar = tqdm(URLS.items())
+    for name, url in pbar:
+        pbar.set_description(f"{name}")
+        try:
+            gdf = gpd.read_file(url)
+            gdf = gdf.to_crs(snakemake.config['geographic_crs'])
+            
+            gdf_cutout = gdf.sjoin(community_cutout, predicate='within')
+            
+            gdf.to_file(f"data/spatial_data/armourdale/{name}.gpkg", driver="GPKG")
+        except DataSourceError:
+            print(f"Failed to download {name} from {url}")
