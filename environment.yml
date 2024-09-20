@@ -4,7 +4,7 @@ channels:
     - bioconda
 dependencies:
     # Requirements for core model functionality
-    - python==3.10.13
+    - python>=3.9
     - pip
     - ipython
     - matplotlib
@@ -25,7 +25,7 @@ dependencies:
     - momepy
     - pysal
     - osmnx
-    - spyder-kernels=2.5
+    - spyder-kernels>=2.5
     - unyt
     - cartopy
     - descartes
@@ -48,3 +48,4 @@ dependencies:
       - census
       - streamlit
       - vresutils
+      - git+https://github.com/FZJ-IEK3-VSA/hplib.git
