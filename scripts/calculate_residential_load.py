@@ -22,8 +22,9 @@ if __name__ == "__main__":
     rescaled_elec_load = (res_elec_load.div(res_elec_load.sum(),axis=1)*
                          (res_elec_load.columns.map(expenses['ELEP*UNITS'])/electricity_price))
     
-    rescaled_heat_load = (res_heat_load.div(res_heat_load.sum(),axis=1)*
-                         (res_heat_load.columns.map(expenses['GASP*UNITS'])/gas_price))
+    rescaled_heat_load = res_heat_load.copy()
+    # rescaled_heat_load = (res_heat_load.div(res_heat_load.sum(),axis=1)*
+    #                      (res_heat_load.columns.map(expenses['GASP*UNITS'])/gas_price))
     
     total_elec_load = rescaled_elec_load*res_structures.T.loc['n_units']
     total_heat_load = rescaled_heat_load*res_structures.T.loc['n_units']

@@ -24,8 +24,8 @@ if __name__ == "__main__":
     
     #get cutout
     community_cutout = gpd.read_file(snakemake.input.community)
-    combined = solar_gdf.sjoin(community_cutout, predicate='within')
+    combined = solar_gdf.sjoin(community_cutout, predicate='within').drop(columns=['index_right'])
     
     
-    solar_gdf.to_file(snakemake.output.local_potential, driver='GPKG')
+    combined.to_file(snakemake.output.local_potential, driver='GPKG')
     

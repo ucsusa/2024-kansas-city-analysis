@@ -122,7 +122,7 @@ rule calculate_rescaled_load:
     input: 
         res_energy_expenses = f"data/{community_name.lower()}_energy_expenses.csv",
         elec_load = "data/timeseries/residential_elec_load.csv",
-        heat_load = "data/timeseries/residential_elec_load.csv",
+        heat_load = "data/timeseries/residential_heat_load.csv",
         res_structures = "data/residential_buildings.csv"
     output: 
         rescaled_elec_load = "data/timeseries/residential_elec_load_rescaled.csv",
