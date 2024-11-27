@@ -37,6 +37,13 @@ rule retrieve_spatial_lut:
         spatial_lut = "data/spatial_data/spatial_lut.csv"
     script: "scripts/retrieve_lut.py"
 
+rule retrieve_outage_data:
+    input:
+        "scripts/retrieve_outage_data.py"
+    output: 
+        outages = "data/timeseries/outages.csv"
+    script: f"{input}"
+
 rule retrieve_census_data:
     output:
         census_data = "data/spatial_data/county_census_data.gpkg",
