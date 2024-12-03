@@ -39,7 +39,7 @@ def handle_datetime(dataframe):
     return frame
     
 
-def retrieve_solar_timeseries(region):
+def retrieve_solar_timeseries(region, save_years=True):
     """
     Retrieves data from NREL's national solar radiation database (NSRDB).
 
@@ -73,7 +73,9 @@ def retrieve_solar_timeseries(region):
     full_df = pd.concat(all_frames, axis=0)
     full_df = handle_datetime(full_df)
     
-    
+    return full_df
+
+
 def process_solar_timeseries(df, normalize=True):
     """
     Converts solar radiation timeseries to a

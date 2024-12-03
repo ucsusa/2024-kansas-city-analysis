@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 state = config['state']
 state_abbr = states.lookup(state).abbr
 
+county_name = config['county']
 community_name = config['community_name']
 
 env_file = Path("./.env").resolve()
@@ -41,14 +42,15 @@ rule retrieve_outage_data:
     input:
         "scripts/retrieve_outage_data.py"
     output: 
-        outages = "data/timeseries/outages.csv"
+        outages = "data/timeseries/outages.csv",
+        county_outages = f"data/timeseries/{county_name.lower()}_outages.csv"
     script: f"{input}"
 
 rule retrieve_census_data:
     output:
         census_data = "data/spatial_data/county_census_data.gpkg",
         state_blockgroups = f"data/spatial_data/{state.lower()}_blockgroups.gpkg",
-        county_blockgroups = f"data/spatial_data/{config['county'].lower()}_blockgroups.gpkg"
+        county_blockgroups = f"data/spatial_data/{county_name.lower()}_blockgroups.gpkg"
     script: "scripts/retrieve_census_data.py"
 
 rule retrieve_project_sunroof:
@@ -110,6 +112,13 @@ rule retrieve_nrel_costs:
     output: 
         costs = "data/technology_costs.csv"
     script: "scripts/retrieve_nrel_costs.py"
+
+rule retrieve_renewable_profiles:
+    input:
+        supply_regions = "data/spatial_data/supply_regions.shp"
+    output:
+        solar = "data/time_series/solar.csv"
+    script: "scripts/retrieve_renewables.py"
 
 rule calculate_historical_expenses:
     input:

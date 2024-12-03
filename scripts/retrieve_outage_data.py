@@ -19,8 +19,8 @@ if __name__ == "__main__":
         frames.append(df)
 
     outages = pd.concat(frames, axis=0)
-
+    outages.to_csv(snakemake.output.outages)
 
     outages = outages.loc[outages['county'] == snakemake.config['county'].capitalize()]
 
-    outages.to_csv(snakemake.output.outages)
+    outages.to_csv(snakemake.output.county_outages)

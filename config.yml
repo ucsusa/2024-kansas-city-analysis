@@ -8,6 +8,7 @@ census_year: 2020
 census_level: 'tract'
 usrdb_start_date: "2024-07-23"  # today?
 usrdb_future_date: "2099-01-01"  # some date in the future, replaces NaT values
+solar_years: [2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020]
 
 # price data
 retail_price_elec: 0.1129  # from google, $/kWh
