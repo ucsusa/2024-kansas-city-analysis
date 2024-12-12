@@ -1,0 +1,47 @@
+name: Workflow Test
+
+on: 
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs: 
+  build:
+    name: Build environment
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: 
+        - "3.11"
+        os:
+        - windows-latest
+
+    defaults:
+      run:
+        shell: bash -l {0}
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up conda
+      uses: conda-incubator/setup-miniconda@v2
+      with:
+        miniforge-variant: Mambaforge # mamba is faster than base conda
+        miniforge-version: latest
+        activate-environment: kansas-city
+        use-mamba: true
+        use-only-tar-bz2: false
+    - run: |
+        conda config --env --set pip_interop_enabled True
+
+    - name: Update environment
+      run: mamba env update -n kansas-city -f environment.yml
+
+    - name: Create .env file
+      run: |
+        echo ${{ secrets.ENV_FILE }} > .env
+
+    - name: Run Snakemake Workflow
+      run: |
+        snakemake --cores=1

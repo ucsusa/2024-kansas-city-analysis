@@ -1,5 +1,9 @@
 cjest-data
-
+.snakemake/
+data
+01-energy-utility.ipynb
+02-census.ipynb
+puma_maps.ipynb
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
