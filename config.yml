@@ -9,21 +9,31 @@ census_level: 'tract'
 usrdb_start_date: "2024-07-23"  # today?
 usrdb_future_date: "2099-01-01"  # some date in the future, replaces NaT values
 solar_years: [2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020]
+# solar_years: [2018]
 
 # price data
-retail_price_elec: 0.1129  # from google, $/kWh
+# retail_price_elec: 0.1129  # from google, $/kWh
+retail_price_elec: 0.1534  # from google, $/kWh
 # https://www.kansasgasservice.com//media/KGS/Tariffs/20-RSS.pdf
 retail_price_gas: 2.3485 # $/Mcf, 0.0080126123 $/kWh
 
 # ATB cost options
+atb_year: 2024  # the ATB publication year // DO NOT CHANGE
 atb_params:
-    atb_year: 2023  # the ATB publication year // DO NOT CHANGE
-    case: 'Market'  # 'R&D'
+    core_metric_case: 'Market'  # 'R&D'
     scenario: 'Moderate'  # 'Conservative', 'Advanced'
-    scale: 'Residential'  # 'Utility', 'Commercial'
+    # scale: 'Residential'  # 'Utility', 'Commercial'
     maturity: 'Y'  # 'N'
-    crp: 30  # '20'
-    cost_year: 2025  # Any year 2020-2050
+    crpyears: 30  # '20' // the loan duration
+    core_metric_variable: 2025  # Any year 2020-2050 // cost year
+
+technology_options:  # From ATB
+  - UtilityPV  # for community solar
+  - ResPV  # for rooftop solar
+  - CommPV  # for school/community center rooftop solar
+  - Commercial Battery Storage
+  - Utility-Scale Battery Storage
+  - Residential Battery Storage
 
 # model options
 topology: "sectoral"  # or building type // NOT IMPLEMENTED

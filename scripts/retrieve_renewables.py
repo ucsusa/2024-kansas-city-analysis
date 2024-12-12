@@ -9,7 +9,8 @@ sys.path.append("functions")
 
 from nrel_data_api import parameters, make_csv_url
 
-model_years = np.array(snakemake.config['model_years']).astype('int')
+# model_years = np.array(snakemake.config['model_years']).astype('int')
+model_years = np.array([2018]).astype('int')
 
 def handle_datetime(dataframe):
     """
@@ -63,15 +64,18 @@ def retrieve_solar_timeseries(region, save_years=True):
             parameters['lat'] = j
             URL = make_csv_url(parameters=parameters, 
                             kind='solar')
-            df = pd.read_csv(URL, skiprows=2)[:8760]
-            df.rename(columns={'GHI':f"{n}"}, inplace=True)
+            df = pd.read_csv(URL, skiprows=2)
+            df['date'] = pd.to_datetime(df[['Year','Month','Day','Hour','Minute']])
+            df = df.drop(columns=['Year','Month','Day','Hour','Minute']).set_index('date')
             frames.append(df)
     
-            solar_df = pd.concat(frames, axis=1)
-    
+        solar_df = pd.concat(frames, axis=1)
+        if save_years:
+            solar_df.to_csv(f"data/timeseries/solar_{year}.csv")    
         all_frames.append(solar_df)
+
     full_df = pd.concat(all_frames, axis=0)
-    full_df = handle_datetime(full_df)
+    # full_df = handle_datetime(full_df)
     
     return full_df
 

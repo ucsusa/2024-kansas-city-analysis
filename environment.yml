@@ -45,3 +45,4 @@ dependencies:
       - nrelpy
       - us
       - census
+      - rasterio

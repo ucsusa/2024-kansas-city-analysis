@@ -33,6 +33,14 @@ rule targets:
         costs = "data/technology_costs.csv",
         dag = "dag.png"
 
+rule retrieve_supply_regions:
+    input:
+        script = "scripts/retrieve_supply_regions.py",
+        community = f"data/spatial_data/{community_name.lower()}_shape.gpkg"
+    output: 
+        supply_regions = "data/spatial_data/supply_regions.shp"
+    script: "scripts/retrieve_supply_regions.py"
+
 rule retrieve_spatial_lut:
     output: 
         spatial_lut = "data/spatial_data/spatial_lut.csv"
@@ -117,7 +125,7 @@ rule retrieve_renewable_profiles:
     input:
         supply_regions = "data/spatial_data/supply_regions.shp"
     output:
-        solar = "data/time_series/solar.csv"
+        solar = "data/timeseries/solar.csv"
     script: "scripts/retrieve_renewables.py"
 
 rule calculate_historical_expenses:
