@@ -31,7 +31,36 @@ rule targets:
         zoning_data = f"data/spatial_data/{community_name.lower()}/zoning.gpkg",
         rescaled_elec_load = "data/timeseries/residential_elec_load_rescaled.csv",
         costs = "data/technology_costs.csv",
+        residential_model = f"data/networks/{community_name}_residential.nc",
         dag = "dag.png"
+
+rule build_residential_model:
+    input:
+        costs = "data/technology_costs.csv",
+        utility_costs = "data/utility_technology_costs.csv",
+        rescaled_elec_load = "data/timeseries/residential_elec_load_rescaled.csv",
+        weather = "data/timeseries/weather_year.csv",
+    output:
+        residential_model = f"data/networks/{community_name}_residential.nc"
+    script:
+        "scripts/build_residential_model.py"
+
+rule solve_residential_model:
+    input:
+        residential_model = f"data/networks/{community_name}_residential.nc"
+    output:
+        residential_model_solved = f"data/networks/{community_name}_residential_solved.nc"
+    script:
+        "scripts/solve_residential_model.py"
+
+rule run_sensitivity:
+    input:
+        residential_model = f"data/networks/{community_name}_residential.nc"
+    output:
+        sensitivity_results = f"results/full_sensitivity_data.csv"
+    script:
+        "scripts/run_sensitivity.py"
+        
 
 rule retrieve_supply_regions:
     input:

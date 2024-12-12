@@ -13,7 +13,8 @@ solar_years: [2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020]
 
 # price data
 # retail_price_elec: 0.1129  # from google, $/kWh
-retail_price_elec: 0.1534  # from google, $/kWh
+retail_price_elec: 0.1534  # from google, $/kWh (bundled, energy+delivery)
+delivery_price_elec: 0.6  # estimated, $/kWh
 # https://www.kansasgasservice.com//media/KGS/Tariffs/20-RSS.pdf
 retail_price_gas: 2.3485 # $/Mcf, 0.0080126123 $/kWh
 
@@ -61,3 +62,6 @@ energy_sectors:
 # geographic options
 geographic_crs: 4326  # for using lat/lon; EPSG code
 projected_crs: 5070  # for doing calculations; EPSG code
+
+# solver options
+solver: 'CPLEX'
