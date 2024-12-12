@@ -7,7 +7,7 @@ import matplotlib.pyplot as plt
 if __name__ == "__main__":
     solver = snakemake.config['solver']
 
-    n = pypsa.Network(snakemake.input.elec_network)
+    n = pypsa.Network(snakemake.input.residential_model)
 
     try:
         n.optimize(solver_name=solver)

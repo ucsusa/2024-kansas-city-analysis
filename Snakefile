@@ -32,6 +32,7 @@ rule targets:
         rescaled_elec_load = "data/timeseries/residential_elec_load_rescaled.csv",
         costs = "data/technology_costs.csv",
         residential_model = f"data/networks/{community_name}_residential.nc",
+        residential_model_solved = f"data/networks/{community_name}_residential_solved.nc",
         dag = "dag.png"
 
 rule build_residential_model:
