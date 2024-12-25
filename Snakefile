@@ -33,6 +33,7 @@ rule targets:
         costs = "data/technology_costs.csv",
         residential_model = f"data/networks/{community_name}_residential.nc",
         residential_model_solved = f"data/networks/{community_name}_residential_solved.nc",
+        sensitivity_results = f"results/full_sensitivity_data.csv",
         dag = "dag.png"
 
 rule build_residential_model:
