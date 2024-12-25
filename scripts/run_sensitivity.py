@@ -43,6 +43,7 @@ if __name__ == "__main__":
             # outputs
             'rooftop_capacity':[],
             'community_solar_capacity':[],
+            'solar_penetration':[],
             'objective_value':[],
             }
 
@@ -86,11 +87,11 @@ if __name__ == "__main__":
         comm_cap = np.abs(n.generators.p_nom_opt['Community Solar'])
         data['rooftop_discount'].append(roof_discount)
         data['community_solar_discount'].append(comm_discount)
-        data['pct_retail_roof'].append(pct_retail_roof)
-        data['pct_retail_comm'].append(pct_retail_comm)
+        data['percent_retail_price_roof'].append(pct_retail_roof)
+        data['percent_retail_price_comm'].append(pct_retail_comm)
         data['community_solar_potential'].append(comm_potential)
         data['rooftop_capacity'].append(roof_cap)
-        data['commsol_capacity'].append(comm_cap)
+        data['community_solar_capacity'].append(comm_cap)
         data['solar_penetration'].append((roof_cap+comm_cap)/3.0)    
         data['objective_value'].append(n.objective)
 
