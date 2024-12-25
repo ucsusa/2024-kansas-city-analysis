@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
 
 
-    bus_name = 'Residential'
+
     ###############################################################
     # add buses
     ###############################################################
@@ -69,6 +69,8 @@ if __name__ == "__main__":
     load_resampled = load.loc['2018'].resample('h').mean().sum(axis=1)
     load_resampled = load_resampled / 1e3  # kW --> MW
 
+
+    bus_name = 'Residential'
     n.add(
         class_name="Load",
         name=f"Load {bus_name}",
@@ -131,7 +133,7 @@ if __name__ == "__main__":
                         p_min_pu=ghi,
                         p_max_pu=ghi,
                         p_nom_extendable=True,
-                        p_nom_max = 2.807,
+                        p_nom_max = 3.0,
                         )
             elif generator=='Residential Battery Storage':
                 pass
@@ -154,7 +156,7 @@ if __name__ == "__main__":
         p_min_pu=ghi,
         p_max_pu=ghi,
         p_nom_extendable=True,
-        p_nom_max=10
+        p_nom_max=3.0
         )
     
     # net metering

@@ -56,7 +56,9 @@ rule solve_residential_model:
 
 rule run_sensitivity:
     input:
-        residential_model = f"data/networks/{community_name}_residential.nc"
+        residential_model = f"data/networks/{community_name}_residential.nc",
+        costs = "data/technology_costs.csv",
+        utility_costs = "data/utility_technology_costs.csv",
     output:
         sensitivity_results = f"results/full_sensitivity_data.csv"
     script:
