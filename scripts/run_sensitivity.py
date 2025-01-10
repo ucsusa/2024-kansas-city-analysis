@@ -107,4 +107,4 @@ if __name__ == "__main__":
         # n.export_to_netcdf(f"data/sensitivity/{timestr}-armourdale-model.nc")
 
     results_df = pd.DataFrame(data)
-    results_df.to_csv(snakemake.ouput.sensitivity_results)
+    results_df.to_csv(snakemake.output.sensitivity_results)
