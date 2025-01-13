@@ -58,10 +58,10 @@ if __name__ == "__main__":
     community_solar_potential = np.arange(0,3.25,0.25)
 
     # test ranges
-    discounts = [0, 0.5, 1]
-    retail_prices = np.array([0])
-    commsol_net_meter = [0]
-    community_solar_potential = [0,3]
+    # discounts = [0, 0.5, 1]
+    # retail_prices = np.array([0])
+    # commsol_net_meter = [0]
+    # community_solar_potential = [0,3]
 
     sensitivities = list(it.product(discounts, 
                     discounts, 
