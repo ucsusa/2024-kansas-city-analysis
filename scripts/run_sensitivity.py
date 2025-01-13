@@ -45,9 +45,11 @@ if __name__ == "__main__":
             'community_solar_capacity':[],
             'solar_penetration':[],
             'objective_value':[],
+            'lcoe':[],
+            'savings':[]
             }
 
-    retail_price = snakemake.config['retail_price_elec']
+    retail_price = snakemake.config['retail_price_elec'] * 1e3
 
     delta = 0.1
     discounts = np.arange(0, 1+delta, delta)
@@ -55,15 +57,21 @@ if __name__ == "__main__":
     commsol_net_meter = retail_prices.copy()
     community_solar_potential = np.arange(0,3.25,0.25)
 
-    sensitivities = it.product(discounts, 
+    # test ranges
+    discounts = [0, 0.5, 1]
+    retail_prices = np.array([0])
+    commsol_net_meter = [0]
+    community_solar_potential = [0,3]
+
+    sensitivities = list(it.product(discounts, 
                     discounts, 
                     retail_prices, 
                     commsol_net_meter, 
                     community_solar_potential, 
-                    )
+                    ))
 
     i = 0
-    for roof_discount, comm_discount, pct_retail_roof, pct_retail_comm, comm_potential in tqdm(list(sensitivities), 
+    for roof_discount, comm_discount, pct_retail_roof, pct_retail_comm, comm_potential in tqdm(sensitivities, 
                                                                                                leave=True):
         # roof discount
         n.generators.loc['ResPV', 'capital_cost'] = costs.at['ResPV',
@@ -92,8 +100,12 @@ if __name__ == "__main__":
         data['community_solar_potential'].append(comm_potential)
         data['rooftop_capacity'].append(roof_cap)
         data['community_solar_capacity'].append(comm_cap)
-        data['solar_penetration'].append((roof_cap+comm_cap)/3.0)    
+        data['solar_penetration'].append((roof_cap+comm_cap)/3.0)
         data['objective_value'].append(n.objective)
+        lcoe = np.round(n.objective / n.loads_t.p_set.sum().values[0],5)
+        data['lcoe'].append(lcoe)
+        savings = np.round(1 - lcoe/retail_price,5)
+        data['savings'].append(savings)
 
 
         timestr = time.strftime("%Y%m%d-%H%M%S")
@@ -102,7 +114,6 @@ if __name__ == "__main__":
             results_df.to_csv(f"results/partial_results/{timestr}_results.csv")
 
         i += 1
-        
         
         # n.export_to_netcdf(f"data/sensitivity/{timestr}-armourdale-model.nc")
 

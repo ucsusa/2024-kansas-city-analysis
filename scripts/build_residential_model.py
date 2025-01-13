@@ -109,7 +109,7 @@ if __name__ == "__main__":
                             + utility_costs['Fixed O&M'])
         )
     
-    retail_price = snakemake.config['retail_price_elec']
+    retail_price = snakemake.config['retail_price_elec'] * 1e3  # convert $/kWh to $/MWh
     
     ###############################################################
     # add generators
