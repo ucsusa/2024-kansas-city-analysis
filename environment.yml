@@ -46,3 +46,4 @@ dependencies:
       - us
       - census
       - rasterio
+      - pygwalker
